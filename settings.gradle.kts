@@ -19,6 +19,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Mercadolibre Android Demo"
+rootProject.name = "meli-android-demo"
 include(":app")
- 
+include(":features:home")
+include(":features:product-detail")
