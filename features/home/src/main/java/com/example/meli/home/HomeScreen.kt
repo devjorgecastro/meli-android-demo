@@ -1,36 +1,64 @@
 package com.example.meli.home
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.meli.core.ui.container.BoxContainer
+import com.example.meli.core.ui.widget.SearchBarComponent
+import com.example.meli.home.viewmodel.HomeContract
+import com.example.meli.home.viewmodel.HomeViewModel
+
+data class HomeEvents(
+    val onSearch: (String) -> Unit = {},
+    val onQueryChange: (String) -> Unit = {}
+)
 
 @Composable
 fun HomeScreen(
-    onNavToDetail: () -> Unit = {}
+    onNavToDetail: () -> Unit = {},
+    viewModel: HomeViewModel
 ) {
-    Box(
-        contentAlignment = Alignment.Center,
+    val state = viewModel.state.collectAsStateWithLifecycle()
+
+    HomeScreen(
+        state = state.value,
+        events = HomeEvents(
+            onSearch = { viewModel.dispatch(HomeContract.Intent.Search(it)) },
+            onQueryChange = {
+                viewModel.dispatch(HomeContract.Intent.RequestSuggestedQueries(it))
+            }
+        )
+    )
+}
+
+
+@Composable
+private fun HomeScreen(
+    state: HomeContract.State,
+    events: HomeEvents = HomeEvents()
+) {
+    BoxContainer(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
     ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            modifier = Modifier
+                .fillMaxSize()
         ) {
-            Text("Home Screen")
-            Button(onClick = onNavToDetail) {
-                Text("Navigate to Detail Screen")
-            }
+            val textFieldState = remember { TextFieldState("") }
+            SearchBarComponent(
+                textFieldState = textFieldState,
+                searchResults = state.suggestedQueries?.queries?.map { it.description }.orEmpty(),
+                onSearch = events.onSearch,
+                onQueryChange = events.onQueryChange,
+            )
         }
     }
 }
@@ -38,5 +66,7 @@ fun HomeScreen(
 @Preview(showBackground = true)
 @Composable
 private fun HomeScreenPreview() {
-    HomeScreen()
+    HomeScreen(
+        state = HomeContract.State()
+    )
 }

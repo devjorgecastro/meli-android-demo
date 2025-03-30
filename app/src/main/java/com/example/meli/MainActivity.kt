@@ -7,9 +7,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
 import com.example.meli.navigation.AppNavHost
 import com.example.meli.ui.theme.MeliTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        BuildConfig.DEBUG
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {

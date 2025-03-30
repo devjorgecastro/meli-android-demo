@@ -23,3 +23,7 @@ rootProject.name = "meli-android-demo"
 include(":app")
 include(":features:home")
 include(":features:product-detail")
+include(":core:ui")
+include(":core:common")
+include(":core:network")
+include(":core:data")

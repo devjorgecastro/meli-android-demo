@@ -2,11 +2,13 @@ package com.example.meli.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.meli.home.HomeScreen
+import com.example.meli.home.viewmodel.HomeViewModel
 import com.example.meli.product_detail.ProductDetailScreen
 
 @Composable
@@ -36,6 +38,7 @@ private fun NavGraphBuilder.homeScreen(
         route = Nav.Screen.Home.route
     ) {
         HomeScreen(
+            viewModel = hiltViewModel<HomeViewModel>(),
             onNavToDetail = {
                 navController.navigate(Nav.Screen.ProductDetail.route)
             }
