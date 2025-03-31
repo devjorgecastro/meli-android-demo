@@ -1,4 +1,4 @@
-package com.example.meli.ui.theme
+package com.example.meli.core.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
